@@ -9,12 +9,12 @@
   <body>
     <h1>Chat App Using Sockets</h1>
 
-    <input type="text" id="newmsg">
+    <input type="text" id="roomId" placeholder="enter room id" />
+    <input type="text" id="username" placeholder="enter user id" />
+    <input type="text" id="newmsg" placeholder="write a message" />
     <button id="btn">SEND</button>
 
-    <ul id="msglist">
-
-    </ul>
+    <ul id="msglist"></ul>
 
     <!-- socket library -->
     <script src="/socket.io/socket.io.js"></script>

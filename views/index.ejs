@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    
+    <h1>Chat App</h1>
+
+    <input id="startchat" type="hidden" data-roomId="<%= id %>" />
+    <input type="text" id="username" placeholder="username..." />
+    <input type="text" id="newmsg" placeholder="write a message..." />
+    <button id="btn">SEND</button>
+
+    <ul id="msglist">
+      <% for(let i=0; i < chats.length; i++) { %>
+      <li><%= chats[i].user %> : <%= chats[i].content %></li>
+      <% } %>
+    </ul>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      // frontend
+
+      // for socket connection -->
+
+      // create socket object
+      var socket = io();
+
+      let startchat = document.getElementById("startchat");
+
+      let btn = document.getElementById("btn");
+      let inputMsg = document.getElementById("newmsg");
+      let msgList = document.getElementById("msglist");
+      let username = document.getElementById("username");
+
+      //emitter -->
+      // room joinng is happening as soon as you join thhe page ( reload the page )
+      socket.emit("join_room", {
+        roomId: startchat.getAttribute("data-roomId"),
+      });
+
+      btn.onclick = function exec() {
+        // emmitter -->
+        socket.emit("msg_send", {
+          msg: inputMsg.value,
+          username: username.value,
+          roomId: startchat.getAttribute("data-roomId"),
+        });
+      };
+
+      // listenner -->
+      socket.on("msg_rcvd", (data) => {
+        let limsg = document.createElement("li");
+        limsg.innerText = `${data.username}: ${data.msg}`;
+        msgList.appendChild(limsg);
+      });
+    </script>
+  </body>
+</html>

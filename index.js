@@ -68,6 +68,10 @@ io.on("connection", (socket) => {
     // this msg will be populated to only those which are connected to the particular mail id
     io.to(data.roomId).emit("msg_rcvd", data);
   });
+
+  socket.on("typing", (data) => {
+    socket.broadcast.to(data.roomid).emit("someone_typing");
+  });
 });
 
 // instead of using express app server , now use http module server
